@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>匠釀 — 精釀啤酒</title>
+<style>
+  :root {
+    --amber: #1a0d0d;
+    --gold: #f4a100;
+    --white: #ffffff;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Helvetica Neue', 'PingFang TC', 'Noto Sans TC', sans-serif;
+    background: var(--amber);
+    color: var(--white);
+    line-height: 1.7;
+  }
+  .nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    background: rgba(26,13,13,0.94);
+    backdrop-filter: blur(16px);
+    padding: 1rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid rgba(244,161,0,0.15);
+  }
+  .nav-brand { font-size: 1.6rem; font-weight: 800; letter-spacing: 0.12em; color: var(--gold); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--white); font-size: 0.95rem; letter-spacing: 0.08em; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--gold); }
+
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; padding: 6rem 2rem 4rem;
+    background: linear-gradient(0deg, var(--amber) 20%, rgba(26,13,13,0.4) 100%),
+                url('https://images.unsplash.com/photo-1535958636474-b021ee887b13?w=1200&q=80') center/cover no-repeat;
+  }
+  .hero-tagline {
+    font-size: 1.1rem; letter-spacing: 0.3em; color: var(--gold);
+    margin-bottom: 1rem; text-transform: uppercase;
+  }
+  .hero h1 {
+    font-size: clamp(3.5rem, 9vw, 7rem);
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-shadow: 0 2px 20px rgba(244,161,0,0.4);
+    margin-bottom: 1.5rem;
+  }
+  .hero-sub {
+    font-size: 1.2rem; color: rgba(255,255,255,0.7);
+    max-width: 500px; margin-bottom: 2.5rem; letter-spacing: 0.1em;
+  }
+  .hero-line {
+    width: 100px; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin-bottom: 2rem;
+  }
+  .btn {
+    display: inline-block; padding: 0.9rem 2.8rem;
+    border: 2px solid var(--gold); color: var(--gold);
+    text-decoration: none; font-size: 1rem; letter-spacing: 0.15em;
+    transition: all 0.35s; position: relative; overflow: hidden;
+  }
+  .btn::before {
+    content: ''; position: absolute; inset: 0; background: var(--gold);
+    transform: scaleX(0); transform-origin: right; transition: transform 0.35s; z-index: -1;
+  }
+  .btn:hover { color: var(--amber); }
+  .btn:hover::before { transform: scaleX(1); transform-origin: left; }
+  .btn-primary { background: var(--gold); color: var(--amber); border-color: var(--gold); font-weight: 700; }
+  .btn-primary:hover { background: #e69500; border-color: #e69500; }
+
+  section { padding: 5rem 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-title {
+    text-align: center; font-size: 2.2rem; letter-spacing: 0.15em;
+    color: var(--gold); margin-bottom: 0.5rem;
+  }
+  .section-sub {
+    text-align: center; color: rgba(255,255,255,0.5); font-size: 0.95rem;
+    letter-spacing: 0.12em; margin-bottom: 3rem;
+  }
+  .section-line {
+    width: 60px; height: 2px; background: var(--gold);
+    margin: 0 auto 3rem;
+  }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+  .card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(244,161,0,0.15);
+    overflow: hidden;
+    transition: transform 0.4s, border-color 0.4s;
+  }
+  .card:hover { transform: translateY(-6px); border-color: var(--gold); }
+  .card-img {
+    height: 240px; background-size: cover; background-position: center;
+  }
+  .card-body { padding: 1.5rem; }
+  .card-body h3 { font-size: 1.2rem; letter-spacing: 0.08em; color: var(--gold); margin-bottom: 0.5rem; }
+  .card-body p { color: rgba(255,255,255,0.6); font-size: 0.9rem; }
+
+  .beer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; }
+  .beer-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(244,161,0,0.1);
+    padding: 2rem; text-align: center;
+    transition: border-color 0.4s;
+  }
+  .beer-card:hover { border-color: var(--gold); }
+  .beer-icon {
+    width: 80px; height: 120px; margin: 0 auto 1.5rem;
+    background: linear-gradient(180deg, var(--gold) 0%, #c47f00 100%);
+    border-radius: 8px 8px 24px 24px;
+    position: relative;
+  }
+  .beer-icon::after {
+    content: ''; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    width: 60px; height: 14px; background: rgba(255,255,255,0.3); border-radius: 20px;
+  }
+  .beer-card h3 { color: var(--gold); font-size: 1.15rem; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+  .beer-card .abv { color: rgba(255,255,255,0.4); font-size: 0.85rem; margin-bottom: 0.8rem; }
+  .beer-card p { color: rgba(255,255,255,0.6); font-size: 0.9rem; }
+
+  .story-section {
+    background: rgba(244,161,0,0.05);
+    text-align: center; padding: 6rem 2rem;
+  }
+  .story-text {
+    max-width: 650px; margin: 0 auto;
+    font-size: 1.15rem; line-height: 2.2;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.08em;
+  }
+
+  .cta-section { text-align: center; padding: 6rem 2rem; }
+  .cta-section h2 { color: var(--gold); font-size: 2rem; margin-bottom: 1rem; }
+
+  footer {
+    background: #0d0606; text-align: center; padding: 3rem 2rem;
+    font-size: 0.85rem; letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.4);
+    border-top: 1px solid rgba(244,161,0,0.1);
+  }
+  footer a { color: var(--gold); text-decoration: none; }
+
+  @media (max-width: 768px) {
+    .nav { flex-direction: column; gap: 0.5rem; padding: 0.8rem 1rem; }
+    .nav-links { gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    section { padding: 3rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand">匠釀</div>
+  <ul class="nav-links">
+    <li><a href="#about">關於</a></li>
+    <li><a href="#beers">啤酒</a></li>
+    <li><a href="#story">故事</a></li>
+    <li><a href="#contact">聯絡</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <p class="hero-tagline">— 匠心釀造 · 極致風味 —</p>
+  <h1>匠釀</h1>
+  <p class="hero-sub">每一滴都是手工的堅持，從麥芽到酒杯，只為那一口的感動</p>
+  <div class="hero-line"></div>
+  <a href="#beers" class="btn btn-primary">探索啤酒</a>
+</section>
+
+<section id="about">
+  <div class="container">
+    <h2 class="section-title">關於匠釀</h2>
+    <div class="section-line"></div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1535958636474-b021ee887b13?w=600&q=80')"></div>
+        <div class="card-body">
+          <h3>手工釀造</h3>
+          <p>小批次手工釀造，每一桶都經過釀酒師的嚴格把關，確保品質與風味的一致性。</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1584225064785-c62a8b43d148?w=600&q=80')"></div>
+        <div class="card-body">
+          <h3>精選原料</h3>
+          <p>進口德國與比利時麥芽，搭配嚴選啤酒花，從源頭確保每一口的純粹。</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-img" style="background-image: url('https://images.unsplash.com/photo-1518099074172-2e47ee6cfdc0?w=600&q=80')"></div>
+        <div class="card-body">
+          <h3>釀造體驗</h3>
+          <p>定期開設釀酒工作坊，帶你親手釀造屬於自己的啤酒，感受釀造的樂趣。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="beers">
+  <div class="container">
+    <h2 class="section-title">精釀系列</h2>
+    <div class="section-line"></div>
+    <div class="beer-grid">
+      <div class="beer-card">
+        <div class="beer-icon"></div>
+        <h3>琥珀艾爾</h3>
+        <p class="abv">ABV 5.2% | IBU 28</p>
+        <p>焦糖麥芽香氣，伴隨柑橘與松針的餘韻，順口而豐富。</p>
+      </div>
+      <div class="beer-card">
+        <div class="beer-icon" style="background: linear-gradient(180deg, #d4a017 0%, #8b6914 100%)"></div>
+        <h3>黃金小麥</h3>
+        <p class="abv">ABV 4.8% | IBU 18</p>
+        <p>香蕉與丁香的經典酵母香氣，清爽易飲，台灣的夏日首選。</p>
+      </div>
+      <div class="beer-card">
+        <div class="beer-icon" style="background: linear-gradient(180deg, #3a1a1a 0%, #1a0a0a 100%)"></div>
+        <h3>黑礦司陶特</h3>
+        <p class="abv">ABV 6.8% | IBU 40</p>
+        <p>深焙咖啡與黑巧克力的濃郁風味，絲絨般的口感。</p>
+      </div>
+      <div class="beer-card">
+        <div class="beer-icon" style="background: linear-gradient(180deg, #e8a020 0%, #c47f00 100%)"></div>
+        <h3>酒花IPA</h3>
+        <p class="abv">ABV 7.0% | IBU 65</p>
+        <p>熱帶水果與松脂的爆炸性香氣，苦韻回甘，IPA愛好者的夢幻之選。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="story-section" id="story">
+  <h2 class="section-title">釀造者的話</h2>
+  <div class="section-line"></div>
+  <p class="story-text">
+    「釀酒是一門時間的藝術。<br>
+    從糖化、煮沸、發酵到熟成，<br>
+    每一步都需要耐心與專注。<br>
+    我們相信，好啤酒值得等待。<br>
+    匠釀，為每一刻的相聚而釀。」
+  </p>
+</section>
+
+<section class="cta-section" id="contact">
+  <h2>來喝一杯吧</h2>
+  <p style="color:rgba(255,255,255,0.6); margin-bottom:2rem; font-size:1.1rem;">台北市中山區松江路 164 巷 5 號</p>
+  <p style="color:rgba(255,255,255,0.4); margin-bottom:2rem;">週三至週日 17:00 – 01:00 | 週一二公休</p>
+  <a href="#" class="btn btn-primary">預約品飲</a>
+</section>
+
+<footer>
+  <p>© 2024 匠釀 Craft Brewery. All rights reserved.</p>
+  <p style="margin-top:0.5rem">手工精釀 · 匠心獨具 — <a href="#">chiambrew.com</a></p>
+</footer>
+
+</body>
+</html>
